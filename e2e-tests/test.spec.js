@@ -10,5 +10,5 @@ describe('Pokedex', () => {
     await page.goto('')
     page.getByText('ivysaur').click()
     await expect(page.getByText('chlorophyll')).toBeVisible()
-  });
+  })
 })
