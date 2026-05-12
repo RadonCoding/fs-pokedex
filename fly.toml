@@ -26,7 +26,10 @@ primary_region = 'arn'
   processes = ['app']
 
 [[http_service.checks]]
+  grace_period = "10s"
+  interval = "30s"
   method = "GET"
+  timeout = "5s"
   path = "/health"
 
 [[vm]]
