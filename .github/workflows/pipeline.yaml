@@ -60,7 +60,7 @@ jobs:
           DEFAULT_BUMP: patch
 
   notify:
-    needs: [version_and_tag]
+    needs: [deploy, version_and_tag]
     runs-on: ubuntu-latest
     steps:
       - uses: sarisia/actions-status-discord@v1
