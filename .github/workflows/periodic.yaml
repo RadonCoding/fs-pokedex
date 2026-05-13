@@ -1,0 +1,16 @@
+name: Periodic
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
+
+jobs:
+  health_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: jtalk/url-health-check-action@v5
+        with:
+          url: https://fs-pokedex-curious-lake-2684.fly.dev/health
+          max-attempts: 3
+          retry-delay: 5s
