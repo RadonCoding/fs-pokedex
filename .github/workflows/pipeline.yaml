@@ -74,7 +74,7 @@ jobs:
 
   notify:
     if: ${{ (success() || failure()) && needs.configure.outputs.deploy == 'true' }}
-    needs: [build_and_test, deploy, version_and_tag]
+    needs: [configure, build_and_test, deploy, version_and_tag]
     runs-on: ubuntu-latest
     steps:
       - uses: sarisia/actions-status-discord@v1
