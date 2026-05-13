@@ -21,22 +21,22 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Lint
+      - name: Run linting
         run: npm run eslint
 
-      - name: Test
+      - name: Run unit tests
         run: npm run test
 
-      - name: Build
+      - name: Run build
         run: npm run build
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: E2E tests
+      - name: Run E2E tests
         run: npm run test:e2e
 
-      - name: Deploy
+      - name: Deploy build
         if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
         run: flyctl deploy --remote-only
         env:
