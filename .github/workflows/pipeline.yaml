@@ -60,11 +60,11 @@ jobs:
           DEFAULT_BUMP: patch
 
   notify:
-    if: ${{ always() && (contains(needs.*.result, 'failure') || needs.version_and_tag.result == 'success') }}
+    if: ${{ always() && github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
     needs: [build_and_test, deploy, version_and_tag]
     runs-on: ubuntu-latest
     steps:
       - uses: sarisia/actions-status-discord@v1
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          status: ${{ job.status }}
+          status: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
