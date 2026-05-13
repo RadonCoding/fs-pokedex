@@ -1,4 +1,4 @@
-name: Deployment pipeline
+name: Pipeline
 
 on:
   push:
@@ -9,41 +9,42 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  simple_deployment_pipeline:    
+  build_and_deploy:
     runs-on: ubuntu-latest
-    steps:      
+    steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      
-      - name: Install dependencies        
+
+      - name: Install dependencies
         run: npm install
-        
-      - name: Check style        
+
+      - name: Lint
         run: npm run eslint
-        
-      - name: Run npm test
+
+      - name: Test
         run: npm run test
-        
-      - name: Run npm build
+
+      - name: Build
         run: npm run build
-        
-      - name: Install Playwright Browsers
+
+      - name: Install Playwright browsers
         run: npx playwright install --with-deps
-        
-      - name: Run Playwright tests
+
+      - name: E2E tests
         run: npm run test:e2e
 
-      - if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
+      - name: Deploy
+        if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
   tag_release:
     if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
-    needs: [simple_deployment_pipeline]
+    needs: [build_and_deploy]
     runs-on: ubuntu-latest
     permissions:
       contents: write
