@@ -60,7 +60,7 @@ jobs:
           DEFAULT_BUMP: patch
 
   notify:
-    if: ${{ always() && github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
+    if: ${{ (success() || failure()) && github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
     needs: [build_and_test, deploy, version_and_tag]
     runs-on: ubuntu-latest
     steps:
