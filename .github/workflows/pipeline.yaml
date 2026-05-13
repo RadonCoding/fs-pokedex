@@ -60,7 +60,7 @@ jobs:
           DEFAULT_BUMP: patch
 
   notify:
-    needs: [deploy, version_and_tag]
+    if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
     runs-on: ubuntu-latest
     steps:
       - uses: sarisia/actions-status-discord@v1
