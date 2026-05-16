@@ -41,6 +41,8 @@ jobs:
 
       - name: Run build
         run: npm run build
+        env:
+          VITE_BASE_URL: /fs-pokedex/
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
